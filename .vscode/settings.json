@@ -1,0 +1,6 @@
+{
+    "python.linting.pylintEnabled": true,
+    "python.linting.enabled": true,
+    "python.pythonPath": "C:\\Users\\Kyle\\AppData\\Local\\Programs\\Python\\Python38-32\\python.exe",
+    "python.linting.flake8Enabled": false
+}

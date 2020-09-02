@@ -1,0 +1,15 @@
+{
+  "name": "reddit-factorial-bot",
+  "version": "1.0.0",
+  "description": "You must create a file in the same directory as `bot.js`\r called `config.json` that contains the following info:",
+  "main": "bot.js",
+  "scripts": {
+    "start": "node ./bot.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "snoowrap": "^1.21.0"
+  }
+}
