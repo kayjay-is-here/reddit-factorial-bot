@@ -1,3 +1,5 @@
-.history/*
+.history/**
 testconfig.yml
 node_modules/
+.vscode/
+.vscode
