@@ -2,5 +2,6 @@
     "clientId": "your client here",
     "clientSecret": "your secret here",
     "username": "bot username",
-    "password": "bot password"
+    "password": "bot password",
+    "subreddits": ["all"]
 }

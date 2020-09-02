@@ -7346,13 +7346,56 @@ function config (name) {
 
 }).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
 },{}],36:[function(require,module,exports){
+const config = require('./config/config.json');
+const Snoowrap = require('snoowrap')
+try {
+  var factorial = (n) => Array.from({
+    length: n
+  }, (v, k) => k + 1).reduce((a, b) => a * b, 1)
+  var double_factorial = (n) => Array.from({
+    length: n
+  }, (v, k) => k + 1).reduce((a, b) => a * b, 2)
+  // TODO host on heroku
+  const r = new Snoowrap({userAgent: 'factorialbot (v1, kjl3080)', clientId: config.clientId, clientSecret: config.clientSecret, username: config.username, password: config.password});
+
+  console.info("Started unexpectedFactorialBot...");
+
+  let subreddits = config.subreddits || ['all']
+
+  subreddits.forEach(async(subreddit) => {
+    r.getSubreddit(subreddit)
+      .getNewComments()
+      .then(async(Listing) => {
+        Listing.forEach(async c => {
+          let comment = await c.body
+          let isFac = /(\d+\!)/;
+          let isDoubleFac = /(\d+\!\!)/;
+          let matched = isFac.match(comment)
+          let doubleMatched = isDoubleFac.match(comment)
+          if (doubleMatched !== null) {
+            return c.reply(`Are you sure you meant \`${matched[0]}\`? Because that would be equal to \`${double_factorial(parseInt(matched[0].substring(0, matched[0].length - 1)))}\`.
+            \nAlso, this is a double factorial, so it's less.\n^this ^bot ^ was ^ made ^by ^u/kjl3080. `);
+          }
+          if (matched !== null) {
+            return c.reply(`Are you sure you meant \`${matched[0]}\`? Because that would be equal to \`${factorial(parseInt(matched[0].substring(0, matched[0].length - 1)))}\`.
+            \n^this ^bot ^ was ^ made ^by ^u/kjl3080.`)
+          }
+        })
+      })
+  })
+
+} catch (err) {
+  console.error(err)
+}
+
+},{"./config/config.json":37,"snoowrap":63}],37:[function(require,module,exports){
 module.exports={
     "clientId": "your client here",
     "clientSecret": "your secret here",
     "username": "bot username",
     "password": "bot password"
 }
-},{}],37:[function(require,module,exports){
+},{}],38:[function(require,module,exports){
 (function (process,global,setImmediate){
 /* @preserve
  * The MIT License (MIT)
@@ -13133,7 +13176,7 @@ module.exports = ret;
 },{"./es5":13,"async_hooks":undefined}]},{},[4])(4)
 });                    ;if (typeof window !== 'undefined' && window !== null) {                               window.P = window.Promise;                                                     } else if (typeof self !== 'undefined' && self !== null) {                             self.P = self.Promise;                                                         }
 }).call(this,require('_process'),typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {},require("timers").setImmediate)
-},{"_process":11,"timers":32}],38:[function(require,module,exports){
+},{"_process":11,"timers":32}],39:[function(require,module,exports){
 (function (global){
 /**
  * @license
@@ -30298,7 +30341,7 @@ module.exports = ret;
 }.call(this));
 
 }).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{}],39:[function(require,module,exports){
+},{}],40:[function(require,module,exports){
 'use strict';
 var handlers;
 
@@ -30386,7 +30429,7 @@ if (typeof Proxy !== 'undefined') {
 
 module.exports = wrap;
 
-},{"harmony-reflect":2}],40:[function(require,module,exports){
+},{"harmony-reflect":2}],41:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -30406,7 +30449,7 @@ PromiseCopy.config({
 });
 var _default = PromiseCopy;
 exports.default = _default;
-},{"bluebird":37}],41:[function(require,module,exports){
+},{"bluebird":38}],42:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -30473,7 +30516,7 @@ var MAX_API_MORECHILDREN_AMOUNT = 20;
 exports.MAX_API_MORECHILDREN_AMOUNT = MAX_API_MORECHILDREN_AMOUNT;
 var MAX_LISTING_ITEMS = 100;
 exports.MAX_LISTING_ITEMS = MAX_LISTING_ITEMS;
-},{}],42:[function(require,module,exports){
+},{}],43:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -30496,7 +30539,7 @@ function _default() {
   config.proxies = true;
   return (0, _helpers.addSnakeCaseShadowProps)(config);
 }
-},{"./helpers.js":44}],43:[function(require,module,exports){
+},{"./helpers.js":45}],44:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -30552,7 +30595,7 @@ exports.StatusCodeError = StatusCodeError;
 function rateLimitWarning(millisecondsUntilReset) {
   return "Warning: ".concat(_constants.MODULE_NAME, " temporarily stopped sending requests because reddit's ratelimit was exceeded. The request you attempted to send was queued, and will be sent to reddit when the current ratelimit period expires in ").concat(millisecondsUntilReset / 1000, " seconds.");
 }
-},{"./constants.js":41}],44:[function(require,module,exports){
+},{"./constants.js":42}],45:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -30792,7 +30835,7 @@ function defineInspectFunc(obj, inspectFunc) {
 function requiredArg(argName) {
   throw new TypeError("Missing required argument ".concat(argName));
 }
-},{"./constants.js":41,"./objects/More.js":49,"lodash":38,"util":2}],45:[function(require,module,exports){
+},{"./constants.js":42,"./objects/More.js":50,"lodash":39,"util":2}],46:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -30885,7 +30928,7 @@ var Comment = class Comment extends _VoteableContent.default {
 };
 var _default = Comment;
 exports.default = _default;
-},{"../helpers.js":44,"./Listing.js":46,"./More.js":49,"./VoteableContent.js":58}],46:[function(require,module,exports){
+},{"../helpers.js":45,"./Listing.js":47,"./More.js":50,"./VoteableContent.js":59}],47:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -31222,7 +31265,7 @@ var Listing = class Listing extends Array {
 });
 var _default = Listing;
 exports.default = _default;
-},{"../Promise.js":40,"../errors.js":43,"../helpers.js":44,"./More.js":49,"lodash":38,"url":33,"util":2}],47:[function(require,module,exports){
+},{"../Promise.js":41,"../errors.js":44,"../helpers.js":45,"./More.js":50,"lodash":39,"url":33,"util":2}],48:[function(require,module,exports){
 (function (global){
 "use strict";
 
@@ -31655,7 +31698,7 @@ var LiveThread = class LiveThread extends _RedditContent.default {
 var _default = LiveThread;
 exports.default = _default;
 }).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{"../helpers.js":44,"./RedditContent.js":52,"events":5,"ws":2}],48:[function(require,module,exports){
+},{"../helpers.js":45,"./RedditContent.js":53,"events":5,"ws":2}],49:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -31938,7 +31981,7 @@ var ModmailConversation = class ModmailConversation extends _RedditContent.defau
 };
 var _default = ModmailConversation;
 exports.default = _default;
-},{"./RedditContent.js":52}],49:[function(require,module,exports){
+},{"./RedditContent.js":53}],50:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -32077,7 +32120,7 @@ var emptyChildren = new More({
 exports.emptyChildren = emptyChildren;
 var _default = More;
 exports.default = _default;
-},{"../Promise.js":40,"../constants.js":41,"../helpers.js":44,"lodash":38}],50:[function(require,module,exports){
+},{"../Promise.js":41,"../constants.js":42,"../helpers.js":45,"lodash":39}],51:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -32278,7 +32321,7 @@ Object.defineProperty(MultiReddit.prototype, 'delete', {
 });
 var _default = MultiReddit;
 exports.default = _default;
-},{"./RedditContent.js":52}],51:[function(require,module,exports){
+},{"./RedditContent.js":53}],52:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -32384,7 +32427,7 @@ var PrivateMessage = class PrivateMessage extends _ReplyableContent.default {
 };
 var _default = PrivateMessage;
 exports.default = _default;
-},{"../helpers.js":44,"./ReplyableContent.js":54}],52:[function(require,module,exports){
+},{"../helpers.js":45,"./ReplyableContent.js":55}],53:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -32572,7 +32615,7 @@ _constants.HTTP_VERBS.forEach(function (method) {
 
 var _default = RedditContent;
 exports.default = _default;
-},{"../Promise.js":40,"../constants.js":41,"../helpers.js":44,"./Listing.js":46,"lodash":38,"util":2}],53:[function(require,module,exports){
+},{"../Promise.js":41,"../constants.js":42,"../helpers.js":45,"./Listing.js":47,"lodash":39,"util":2}],54:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -32951,7 +32994,7 @@ var RedditUser = class RedditUser extends _RedditContent.default {
 };
 var _default = RedditUser;
 exports.default = _default;
-},{"../constants.js":41,"../errors.js":43,"./RedditContent.js":52}],54:[function(require,module,exports){
+},{"../constants.js":42,"../errors.js":44,"./RedditContent.js":53}],55:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -33110,7 +33153,7 @@ var ReplyableContent = class ReplyableContent extends _RedditContent.default {
 };
 var _default = ReplyableContent;
 exports.default = _default;
-},{"../helpers.js":44,"./RedditContent.js":52}],55:[function(require,module,exports){
+},{"../helpers.js":45,"./RedditContent.js":53}],56:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -33514,7 +33557,7 @@ var Submission = class Submission extends _VoteableContent.default {
 };
 var _default = Submission;
 exports.default = _default;
-},{"../helpers.js":44,"./VoteableContent.js":58}],56:[function(require,module,exports){
+},{"../helpers.js":45,"./VoteableContent.js":59}],57:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -35407,7 +35450,7 @@ var Subreddit = class Subreddit extends _RedditContent.default {
 };
 var _default = Subreddit;
 exports.default = _default;
-},{"../Promise.js":40,"../errors.js":43,"../helpers.js":44,"./RedditContent.js":52,"fs":2,"lodash":38,"stream":31}],57:[function(require,module,exports){
+},{"../Promise.js":41,"../errors.js":44,"../helpers.js":45,"./RedditContent.js":53,"fs":2,"lodash":39,"stream":31}],58:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -35425,7 +35468,7 @@ class UserList {
 }
 
 exports.default = UserList;
-},{}],58:[function(require,module,exports){
+},{}],59:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -35741,7 +35784,7 @@ Object.defineProperty(VoteableContent.prototype, 'delete', {
 });
 var _default = VoteableContent;
 exports.default = _default;
-},{"../Promise.js":40,"../helpers.js":44,"./ReplyableContent.js":54}],59:[function(require,module,exports){
+},{"../Promise.js":41,"../helpers.js":45,"./ReplyableContent.js":55}],60:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -35971,7 +36014,7 @@ var WikiPage = class WikiPage extends _RedditContent.default {
 };
 var _default = WikiPage;
 exports.default = _default;
-},{"./RedditContent.js":52}],60:[function(require,module,exports){
+},{"./RedditContent.js":53}],61:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -36099,7 +36142,7 @@ var _UserList = _interopRequireDefault(require("./UserList.js"));
 var _ModmailConversation = _interopRequireDefault(require("./ModmailConversation.js"));
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-},{"./Comment.js":45,"./Listing.js":46,"./LiveThread.js":47,"./ModmailConversation.js":48,"./More.js":49,"./MultiReddit.js":50,"./PrivateMessage.js":51,"./RedditContent.js":52,"./RedditUser.js":53,"./ReplyableContent.js":54,"./Submission.js":55,"./Subreddit.js":56,"./UserList.js":57,"./VoteableContent.js":58,"./WikiPage.js":59}],61:[function(require,module,exports){
+},{"./Comment.js":46,"./Listing.js":47,"./LiveThread.js":48,"./ModmailConversation.js":49,"./More.js":50,"./MultiReddit.js":51,"./PrivateMessage.js":52,"./RedditContent.js":53,"./RedditUser.js":54,"./ReplyableContent.js":55,"./Submission.js":56,"./Subreddit.js":57,"./UserList.js":58,"./VoteableContent.js":59,"./WikiPage.js":60}],62:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -36466,7 +36509,7 @@ var rawRequest = typeof XMLHttpRequest !== 'undefined' ? require('./xhr') : requ
   gzip: true
 });
 exports.rawRequest = rawRequest;
-},{"./Promise.js":40,"./constants.js":41,"./errors.js":43,"./xhr":63,"lodash":38,"request-promise":2}],62:[function(require,module,exports){
+},{"./Promise.js":41,"./constants.js":42,"./errors.js":44,"./xhr":64,"lodash":39,"request-promise":2}],63:[function(require,module,exports){
 (function (global){
 "use strict";
 
@@ -39026,7 +39069,7 @@ if (!module.parent && _helpers.isBrowser) {
 
 module.exports = snoowrap;
 }).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{"./Promise.js":40,"./constants.js":41,"./create_config.js":42,"./errors.js":43,"./helpers.js":44,"./objects/index.js":60,"./request_handler.js":61,"lodash":38,"promise-chains":39,"util":2}],63:[function(require,module,exports){
+},{"./Promise.js":41,"./constants.js":42,"./create_config.js":43,"./errors.js":44,"./helpers.js":45,"./objects/index.js":61,"./request_handler.js":62,"lodash":39,"promise-chains":40,"util":2}],64:[function(require,module,exports){
 "use strict";
 
 var _Promise = _interopRequireDefault(require("./Promise.js"));
@@ -39151,32 +39194,4 @@ module.exports = function rawRequest(options) {
     throw err;
   });
 };
-},{"./Promise.js":40,"./errors.js":43,"querystring":15,"url":33}],64:[function(require,module,exports){
-const config = require('./config/config.json');
-const Snoowrap = require('snoowrap')
-
-var factorial=(n)=>Array.from({length: n},(v, k) => k+1).reduce((a, b) => a*b, 1)
-// TODO host on heroku
-const r = new Snoowrap({
-    userAgent: 'factorialbot (v1, kjl3080)',
-    clientId: config.clientId,
-    clientSecret: config.clientSecret,
-    username: config.username,
-    password: config.password,
-});
-
-console.info("Started unexpectedFactorialBot...");
-
-r.getSubreddit('all').getNewComments()
-.then(async (Listing) => {
-    Listing.forEach(async c=>{
-        let comment = await c.body
-        let regex = /(\d+\!)/;
-        let matched = regex.match(comment)
-        if(matched !== null) {
-            return c.reply(`Are you sure you meant \`${matched[0]}\`? Because that would be equal to \`${factorial(parseInt(matched[0].substring(0, matched[0].length-1)))}\`.
-            \n^this ^bot ^ was ^ made ^by ^u/kjl3080.`)
-        }
-    })
-})
-},{"../config/config.json":36,"snoowrap":62}]},{},[64]);
+},{"./Promise.js":41,"./errors.js":44,"querystring":15,"url":33}]},{},[36]);
